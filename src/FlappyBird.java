@@ -64,6 +64,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
 
     Timer gameLoop;
     Timer placePipesTimer;
+    boolean gameOver = false;
 
 
     FlappyBird(){
@@ -141,7 +142,22 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
         for (int i = 0; i < pipes.size(); i++) {
             Pipe pipe = pipes.get(i);
             pipe.x += velocityX; 
+
+            if (collision(bird, pipe)) {
+                gameOver = true;
+            }
         }
+
+        if (bird.y > boardHeight) {
+            gameOver = true;
+        }
+    }
+
+    public boolean collision(Bird a, Pipe b){
+        return  a.x < b.x + b.width &&  //birds top left corner not touching pipes beginning
+                a.x + a.width > b.x &&  //birds top right corner not touching pipes end 
+                a.y < b.y + b.height && 
+                a.y + a.height > b.y;   
     }
 
 
@@ -149,6 +165,10 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     public void actionPerformed(ActionEvent e) { //action performed every 16 mil secs
         move();
         repaint(); //this calls paint component
+        if (gameOver) {
+            placePipesTimer.stop();
+            gameLoop.stop();
+        }
 
     }
 
