@@ -60,6 +60,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     int gravity = 1;  //every sec bird is ginna slow down by 1 pixel
     
     ArrayList<Pipe> pipes;
+    Random randome = new Random();
 
     Timer gameLoop;
     Timer placePipesTimer;
@@ -97,8 +98,17 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     }
 
     public void placePipes(){ // place new pipes
+        
+        int randomePipeY = (int )(pipeY - pipeHeight/4 -Math.random()*(pipeHeight/2));  // (0-1) * pipeHeight/2 -> 0-256 randome number  ---> 1/4 - 3/4 pipeHeight
+        int openingSpace = boardHeight/4;
+
         Pipe topPipe = new Pipe(topPipeImg);
+        topPipe.y = randomePipeY;
         pipes.add(topPipe);
+
+        Pipe bottomePipe = new Pipe(bottomPipeImg);
+        bottomePipe.y = topPipe.y + pipeHeight + openingSpace;
+        pipes.add(bottomePipe);
 
     }
 
@@ -133,6 +143,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
             pipe.x += velocityX; 
         }
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) { //action performed every 16 mil secs
